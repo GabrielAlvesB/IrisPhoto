@@ -217,9 +217,11 @@ try {
   foreach ($row in (Read-Rows $database 'SELECT `Signature_`, `Root`, `Key`, `Name`, `Type` FROM `RegLocator`' 5)) { $locators[$row[0]] = $row }
   $appPaths = '^Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\[^\\]+\.exe$'
   # Suffix, how to match the key, key, value name, locator type (2 = raw value, 1 = file; the 64-bit flag is masked off).
+  # Iris Photo: the registry key is the name without spaces (Software\IrisPhoto).
+  $regKey = "Software\$($policy.name -replace ' ', '')"
   $searchContract = @(
-    @('DIR',       'exact', "Software\$($policy.name)", 'InstallDir',    '2'),
-    @('FOLDER',    'exact', "Software\$($policy.name)", 'InstallFolder', '2'),
+    @('DIR',       'exact', $regKey,                    'InstallDir',    '2'),
+    @('FOLDER',    'exact', $regKey,                    'InstallFolder', '2'),
     @('PATH',      'regex', $appPaths,                  'Path',          '2'),
     @('EXEFOLDER', 'regex', $appPaths,                  '',              '1'),
     @('EXE',       'regex', $appPaths,                  '',              '1'))
@@ -360,7 +362,7 @@ try {
     $found = @($registry | Where-Object { $_[0] -eq $entry[0] -and $_[1] -eq $entry[1] -and $_[2] -eq $entry[2] -and $_[3] -eq $entry[3] })
     if ($found.Count -ne 1) { throw "Lost or changed registration: $($entry[1]) / $($entry[2])" }
   }
-  $installDir = @($registry | Where-Object { $_[0] -eq '-1' -and $_[1] -eq "Software\$($policy.name)" -and $_[2] -eq 'InstallDir' -and $_[3] -eq '[INSTALLFOLDER]' })
+  $installDir = @($registry | Where-Object { $_[0] -eq '-1' -and $_[1] -eq "Software\$($policy.name -replace ' ', '')" -and $_[2] -eq 'InstallDir' -and $_[3] -eq '[INSTALLFOLDER]' })
   if ($installDir.Count -ne 1) { throw 'A context-sensitive installation-folder record is required.' }
   Write-Output "PASS $($policy.name): $cases scope cases, folder preservation, action sequencing and registry contract. No installation performed."
 } finally {
