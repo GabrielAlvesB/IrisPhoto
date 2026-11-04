@@ -1,6 +1,6 @@
 # Summary
 
-[PhotoCraft Documentation](README.md)
+[Iris Photo Documentation](README.md)
 
 # Getting started
 

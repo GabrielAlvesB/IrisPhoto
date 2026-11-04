@@ -1,46 +1,41 @@
-# PhotoCraft app icon
+# Iris Photo app icon
 
-A **nine-tailed kitsune with a brow diamond**: an engraving portrait, seated, looking back at the
-viewer, in the Crafting Apps' owl-template framing (full-bleed field, head and body filling the
-tile, tails running off the edges).
+**Drawing:** a photo (mountains and a sun) between two crop marks. It is the same drawing the Iris
+Workspace shows for Iris Photo (`../Iris/src/shared/types/workspace.types.ts`, entry `irisphoto`).
 
-## Palette
-
-Exactly three colours:
+**Palette:**
 
 | Colour | Hex | Used for |
 |---|---|---|
-| Ink | `#0b0b0c` | line work and contours |
-| Paper | `#efe9dc` | the figure |
-| PhotoCraft blue (app colour) | `#2f7bf5` | the full-bleed field |
+| Cyan | `#00b1cc` | gradient start (top left), `oklch(0.66 0.2 205)` |
+| Blue | `#0083f4` | gradient end (bottom right), `oklch(0.60 0.21 247)` |
+| White | `#ffffff` | the photo frame and the crop marks |
 
-## Geometry
+**Tile:** `viewBox="0 0 512 512"`; the Workspace's 64-grid drawing scaled so its rounded tile
+(`rx` 15 on 56) fills the canvas edge to edge. The macOS files add Apple's transparent margin
+(tile = 824/1024 of the canvas); Windows and Linux use the tile edge to edge.
 
-A 512-unit tile (`viewBox="0 0 512 512"`), rounded square with `rx=112`, no border. The macOS
-renders pad it onto Apple's 824/1024 icon grid; the Windows and Linux renders use the whole tile,
-as the other Crafting Apps do.
-
-## Provenance
-
-The owner's original drawing, made in ArtCraft (2880 px, engraving style, keyed to the palette),
-vectorised. License: see `LICENSE.txt`.
+**Licence:** part of the Iris brand, see `LICENSE.txt`.
 
 ## Files
 
-- `photocraft.svg`: canonical master (traced at 2048 px).
-- `photocraft-small.svg`: lighter trace (traced at 1024 px); also the hicolor scalable icon.
-- `photocraft-1024.png`: 1024 px render on the macOS grid.
-- `photocraft.icns`: macOS bundle icon (`CFBundleIconFile`).
-- `photocraft.ico`: Windows icon, 16–256 px, embedded in the `.exe` by `apps/photocraft/build.rs`.
-- `hicolor/<size>/apps/ai.storyteller.photocraft.png` (16–512) and `hicolor/scalable/...svg`:
-  Linux icon theme.
-
-The app also sets the window icon and Wayland app ID at runtime (`apps/photocraft/src/app_icon.rs`,
-`main.rs`). On Windows the taskbar shows the icon of the Start Menu shortcut that launches the
-exe, so the MSI's `<Icon Id>` keeps the `.exe` extension (ICE50); `app_icon.rs` documents the
-details and tests the `.ico` sizes and the WiX icon references.
+| File | What | Used by |
+|---|---|---|
+| `photocraft.svg` | master vector | source for everything below |
+| `photocraft-small.svg` | copy of the master (kept so `packaging/icons.sh` keeps working) | `hicolor/scalable` |
+| `photocraft-1024.png` | tile with Apple margin, 1024 px | runtime Dock icon on macOS (`apps/photocraft/src/app_icon.rs`) |
+| `photocraft.icns` | macOS icon set, 16 to 1024 px | `packaging/macos/package.sh` (`CFBundleIconFile`) |
+| `photocraft.ico` | Windows icon, 16 to 256 px | `apps/photocraft/build.rs` (embedded in the `.exe`), the MSI |
+| `hicolor/<size>/apps/com.iris.irisphoto.png` | Linux theme icons, 16 to 512 px; the 256 one is also the runtime window icon on Windows and Linux, the 128 one the brand mark in the title bar (`crates/ui-egui/src/panels/brand.rs`) and the update prompt | `packaging/linux/com.iris.irisphoto.desktop` |
+| `hicolor/scalable/apps/com.iris.irisphoto.svg` | Linux scalable icon | as above |
 
 ## Regenerate
 
-Replace `photocraft.svg` (and `photocraft-small.svg`), then run `packaging/icons.sh`. It needs
-`resvg`, plus `iconutil` on macOS; the `.ico` is packed by `cargo xtask ico`.
+Edit `photocraft.svg`, copy it over `photocraft-small.svg`, then run `packaging/icons.sh` (needs
+`resvg`; `iconutil` on macOS for the `.icns`). Without `resvg`, any SVG rasteriser works as long
+as it writes the same files: on Windows the Iris Photo icons were rendered with the Electron in
+`../Iris/node_modules` (unset `ELECTRON_RUN_AS_NODE`), the `.ico` built with `cargo xtask ico` and
+the `.icns` written from PNGs.
+
+PhotoCraft's original icon (the kitsune) is no longer used. A copy of its light trace stays in
+`crates/io/src/svg/clip-path-tile.svg` only as an SVG-import test case.

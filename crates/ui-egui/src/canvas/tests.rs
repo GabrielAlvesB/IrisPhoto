@@ -1401,7 +1401,7 @@ fn wayland_start_screen_hint_does_not_claim_file_drop_works() {
     assert!(hint.ends_with(&format!("paste a copied image with {}.", crate::notices::paste_hint(&wayland))), "{hint}");
 }
 
-/// A tiling window manager can hand PhotoCraft a canvas narrower than the Home card (460
+/// A tiling window manager can hand Iris Photo a canvas narrower than the Home card (460
 /// points): the two buttons must stay inside the window instead of being clipped at its edges.
 #[test]
 fn start_screen_buttons_stay_inside_a_narrow_canvas() {
@@ -1419,7 +1419,7 @@ fn start_screen_buttons_stay_inside_a_narrow_canvas() {
         PhotocraftApp::setup_context(&h.ctx, crate::theme::ThemeKind::default());
         h.state_mut().1 = true;
         h.run_steps(3);
-        for label in ["New document", "Join us on Discord"] {
+        for label in ["New document", "Based on PhotoCraft"] {
             for node in h.query_all_by_label_contains(label) {
                 let r = node.rect();
                 assert!(r.left() >= 0.0 && r.right() <= width, "`{label}` is clipped in a {width}-point-wide canvas: {r:?}");

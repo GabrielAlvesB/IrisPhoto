@@ -3,13 +3,13 @@
 //! `x:xmpmeta/rdf:RDF/rdf:Description`, as attributes or as child elements.
 //!
 //! Loading applies only the settings the file holds, over the current ones, as Camera Raw's
-//! Load Settings does; settings PhotoCraft has no control for (lens corrections, geometry,
+//! Load Settings does; settings Iris Photo has no control for (lens corrections, geometry,
 //! defringe, …) are ignored and named in the report. The same reader fills the dialog from a
 //! raw file's sidecar (`IMG_0001.xmp` beside `IMG_0001.CR2`), and the writer keeps it. Saving writes every supported
 //! control, so loading the file in Photoshop reproduces the dialog.
 //!
 //! White balance: a Camera Raw Filter on a rendered image uses the relative
-//! `IncrementalTemperature` / `IncrementalTint` (−100..=100), which are PhotoCraft's Temperature
+//! `IncrementalTemperature` / `IncrementalTint` (−100..=100), which are Iris Photo's Temperature
 //! and Tint. The absolute `Temperature` (kelvin) / `Tint` of raw-file settings have no
 //! counterpart and are ignored.
 
@@ -23,7 +23,7 @@ pub const MAX_XMP_BYTES: usize = 4 * 1024 * 1024;
 
 type Field = fn(&mut CameraRaw) -> &mut f32;
 
-/// `crs:` scalar name, PhotoCraft field, and the slider range values are clamped to.
+/// `crs:` scalar name, Iris Photo field, and the slider range values are clamped to.
 const SCALARS: &[(&str, Field, f32, f32)] = &[
     ("IncrementalTemperature", |p| &mut p.temperature, -100.0, 100.0),
     ("IncrementalTint", |p| &mut p.tint, -100.0, 100.0),
@@ -154,7 +154,7 @@ const METADATA: &[&str] = &[
 pub struct LoadReport {
     /// How many settings were applied.
     pub applied: usize,
-    /// `crs:` settings without a PhotoCraft control (set to something other than their neutral
+    /// `crs:` settings without a Iris Photo control (set to something other than their neutral
     /// value), or with an unusable value, in file order.
     pub ignored: Vec<String>,
 }
@@ -175,7 +175,7 @@ fn curve(node: roxmltree::Node<'_, '_>) -> Option<Vec<[f32; 2]>> {
         points.push([number(x)?, number(y)?]);
     }
     validate_curve(&points).ok()?;
-    // Camera Raw's linear curve is the identity's two end points; PhotoCraft's is empty.
+    // Camera Raw's linear curve is the identity's two end points; Iris Photo's is empty.
     if points == [[0.0, 0.0], [255.0, 255.0]] {
         points.clear();
     }
@@ -278,7 +278,7 @@ fn escape(s: &str) -> String {
 const TOOLKIT: &str = "PhotoCraft";
 const META_NS: &str = "adobe:ns:meta/";
 
-/// Did [`save`] write this file? True when its `x:xmpmeta` names PhotoCraft as the toolkit
+/// Did [`save`] write this file? True when its `x:xmpmeta` names Iris Photo as the toolkit
 /// (`x:xmptk`). Lightroom, Bridge and Camera Raw put their own toolkit there when they write a
 /// file, so a sidecar another application touched since reads false. Never panics.
 pub fn is_photocraft_xmp(bytes: &[u8]) -> bool {
@@ -380,7 +380,7 @@ mod tests {
         assert_eq!((p.hsl_hue[3], p.hsl_sat[3]), (25.0, 20.0));
         assert_eq!((p.sharpen_amount, p.noise_luminance, p.grain_amount), (15.0, 5.0, 10.0));
         assert_eq!(p.grade_blending, 50.0);
-        // The linear tone curve is PhotoCraft's empty one; an element-form setting is read too.
+        // The linear tone curve is Iris Photo's empty one; an element-form setting is read too.
         assert!(p.point_curve.is_empty());
         assert_eq!(p.point_curve_red, vec![[0.0, 0.0], [128.0, 140.0], [255.0, 255.0]]);
         assert_eq!(p.dehaze, 12.0);

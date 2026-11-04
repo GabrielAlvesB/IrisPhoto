@@ -25,9 +25,9 @@ fn main() -> std::io::Result<()> {
     // to `WindowsResource::new`, which reads the Cargo package version. A pre-release such as
     // `1.2.3-rc.1` stays in the strings; the numeric fields are `1.2.3.0`.
     res.set_icon("../../assets/app-icon/photocraft.ico")
-        .set("ProductName", "PhotoCraft")
-        .set("FileDescription", "PhotoCraft command-line interface")
-        .set("CompanyName", "Learning Machines LLC")
+        .set("ProductName", "Iris Photo")
+        .set("FileDescription", "Iris Photo command-line interface")
+        .set("CompanyName", "Gabriel Alves Tech")
         .set("LegalCopyright", "Copyright (c) the PhotoCraft authors. MIT OR Apache-2.0.")
         .set("OriginalFilename", "photocraft-cli.exe")
         .set("InternalName", "photocraft-cli");

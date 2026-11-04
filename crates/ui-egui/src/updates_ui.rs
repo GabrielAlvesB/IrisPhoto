@@ -30,7 +30,7 @@ fn release_of(found: &photocraft_engine::updates_cmds::Release) -> craft_update:
     craft_update::Release {
         tag: format!("v{}", found.version),
         version: craft_update::parse_version(&found.version),
-        name: format!("PhotoCraft {}", found.version),
+        name: format!("Iris Photo {}", found.version),
         html_url: found.url.clone(),
         ..Default::default()
     }
@@ -236,7 +236,7 @@ mod tests {
             .unwrap()
             .as_ref()
             .unwrap()
-            .send(Ok(Some(Release { version: "99.0.0".into(), url: "https://github.com/storytold/photocraft/releases/tag/v99.0.0".into() })))
+            .send(Ok(Some(Release { version: "99.0.0".into(), url: "https://github.com/GabrielAlvesB/IrisPhoto/releases/tag/v99.0.0".into() })))
             .unwrap();
         app.run("updates.status", serde_json::json!({})).unwrap();
         at(&mut app, &ctx, 1.0);
@@ -257,7 +257,7 @@ mod tests {
             .unwrap()
             .as_ref()
             .unwrap()
-            .send(Ok(Some(Release { version: "99.0.0".into(), url: "https://github.com/storytold/photocraft/releases/tag/v99.0.0".into() })))
+            .send(Ok(Some(Release { version: "99.0.0".into(), url: "https://github.com/GabrielAlvesB/IrisPhoto/releases/tag/v99.0.0".into() })))
             .unwrap();
         at(&mut app, &ctx, 1.0);
         assert!(app.updates_rt.updater.prompt_open(), "startup prompt initialized on available release");
