@@ -478,8 +478,8 @@ fn arabic_labels_are_laid_out_right_to_left() {
         let label = tr(lang("ar"), "No properties");
         assert_eq!(label, "لا توجد خصائص");
         assert!(x_of(label, 'ل') > x_of(label, 'ص'), "{label}: first word at the right");
-        let join = tr(lang("ar"), "Iris Photo on GitHub");
-        assert!(x_of(join, 'G') < x_of(join, 'ع'), "{join}: GitHub at the left");
+        let join = tr(lang("ar"), "Show in Explorer");
+        assert!(x_of(join, 'E') < x_of(join, 'ظ'), "{join}: Explorer at the left");
     });
 }
 
